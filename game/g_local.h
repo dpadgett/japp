@@ -745,7 +745,7 @@ typedef struct level_locals_s {
 	qboolean			allReady;
 	qboolean			lockedTeams[TEAM_NUM_TEAMS];
 
-	std::vector<gentity_t *>	reservedEnts;
+	int					reservedItemEntStart;
 
 	struct {
 		fileHandle_t		admin, console, security;
@@ -977,7 +977,6 @@ qboolean		G_SpawnFloat( const char *key, const char *defaultString, float *out )
 gentity_t		*G_SpawnGEntityFromSpawnVars( qboolean inSubBSP );
 qboolean		G_SpawnInt( const char *key, const char *defaultString, int *out );
 void			G_SpawnItem( gentity_t *ent, const gitem_t *item );
-gentity_t		*G_SpawnReservedEntity( void );
 qboolean		G_SpawnString( const char *key, const char *defaultString, char **out );
 qboolean		G_SpawnVector( const char *key, const char *defaultString, vector3 *out );
 void			G_TeamCommand( team_t team, const char *cmd );
@@ -1005,7 +1004,7 @@ void			ItemUse_UseCloak( gentity_t *ent );
 void			ItemUse_UseDisp( gentity_t *ent, int type );
 void			ItemUse_UseEWeb( gentity_t *ent );
 void			InitBodyQue( void );
-void			InitReservedEntities( void );
+void			InitReservedItemEntities( void );
 void			InitSiegeMode( void );
 qboolean		InFront( vector3 *spot, vector3 *from, vector3 *fromAngles, float threshHold );
 int				InFieldOfVision( vector3 *viewangles, float fov, vector3 *angles );

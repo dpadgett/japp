@@ -2245,17 +2245,23 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	if ( g_logItemPickup.integer )
 		G_LogPrintf( level.log.console, "Item: %i %s %s\n", other->s.number, other->client ? other->client->pers.netname : "<null>", ent->item->classname );
 
+	int reservedNumber = ent->s.number;
+	if ( level.reservedItemEntStart + ent->s.modelindex - 1 < 256 ) {
+		reservedNumber = level.reservedItemEntStart + ent->s.modelindex - 1;
+	}
+	//Com_Printf( "EV_ITEM_PICKUP using %d instead of %d for item %d\n", reservedNumber, ent->s.number, ent->s.modelindex );
+
 	// play the normal pickup sound
 	if ( predict ) {
 		if ( other->client ) {
-			BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, ent->s.number, &other->client->ps );
+			BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, reservedNumber, &other->client->ps );
 		}
 		else {
-			G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.number );
+			G_AddPredictableEvent( other, EV_ITEM_PICKUP, reservedNumber );
 		}
 	}
 	else {
-		G_AddEvent( other, EV_ITEM_PICKUP, ent->s.number );
+		G_AddEvent( other, EV_ITEM_PICKUP, reservedNumber );
 	}
 
 	// powerup pickups are global broadcasts
@@ -2265,14 +2271,14 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 			gentity_t	*te;
 
 			te = G_TempEntity( &ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex;
+			te->s.eventParm = reservedNumber;
 			te->r.svFlags |= SVF_BROADCAST;
 		}
 		else {
 			gentity_t	*te;
 
 			te = G_TempEntity( &ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex;
+			te->s.eventParm = reservedNumber;
 			// only send this temp entity to a single client
 			te->r.svFlags |= SVF_SINGLECLIENT;
 			te->r.singleClient = other->s.number;
@@ -2347,7 +2353,7 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 gentity_t *LaunchItem_Throw( const gitem_t *item, vector3 *origin, vector3 *velocity ) {
 	gentity_t	*dropped;
 
-	dropped = G_SpawnReservedEntity();
+	dropped = G_Spawn();
 
 	dropped->s.eType = ET_ITEM;
 	dropped->s.modelindex = item - bg_itemlist;	// store item number in modelindex
@@ -2419,7 +2425,7 @@ gentity_t *LaunchItem_Throw( const gitem_t *item, vector3 *origin, vector3 *velo
 gentity_t *LaunchItem_Drop( const gitem_t *item, vector3 *origin, vector3 *dir ) {
 	gentity_t	*dropped;
 
-	dropped = G_SpawnReservedEntity();
+	dropped = G_Spawn();
 
 	dropped->s.eType = ET_ITEM;
 	dropped->s.modelindex = item - bg_itemlist; // store item number in modelindex

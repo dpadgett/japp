@@ -1645,6 +1645,7 @@ void CG_EntityEvent( centity_t *cent, vector3 *position ) {
 				break;
 
 			index = cg_entities[es->eventParm].currentState.modelindex;		// player predicted
+			//Com_Printf( "Item pickup found index %d from ent %d\n", index, es->eventParm );
 
 			if ( index < 1 && cg_entities[es->eventParm].currentState.isJediMaster ) { //a holocron most likely
 				unsigned int fpIndex = cg_entities[es->eventParm].currentState.trickedEntIndex[3];

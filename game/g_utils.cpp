@@ -425,33 +425,24 @@ static void G_SpewEntList( void ) {
 	}
 }
 
-static void G_InitReservedEntity( gentity_t *ent ) {
+#define ITMSF_SUSPEND		1
+static void G_InitReservedItemEntity( gentity_t *ent, const gitem_t *item ) {
+	G_SpawnItem( ent, item );
 	ent->classname = "reservedent";
 	//ent->neverFree = qtrue;
+	ent->s.eFlags |= EF_NODRAW;
+	ent->spawnflags |= ITMSF_SUSPEND;
 }
 
-gentity_t *G_SpawnReservedEntity( void ) {
-	static size_t index = 0u;
-	if ( level.reservedEnts.size() ) {
-		gentity_t *e = level.reservedEnts[index++];
-		index %= level.reservedEnts.size();
-
-		G_FreeEntity( e );
-		//TODO: return flags etc..? :/
-		G_InitReservedEntity( e );
-
-		return e;
+void InitReservedItemEntities( void ) {
+	level.reservedItemEntStart = level.num_entities;
+	if ( level.num_entities + bg_numItems > 256 ) {
+		Com_Printf( "WARNING: Not enough low-numbered ents left to init reserved item entities\n" );
+		Com_Printf( "Need %d but only %d are left\n", bg_numItems, 256 - level.num_entities );
 	}
-	else {
-		return G_Spawn();
-	}
-}
-
-void InitReservedEntities( void ) {
-	for ( int i = level.num_entities; i < japp_reserveEntitySlots.integer; i++ ) {
+	for ( int i = 1; i < bg_numItems && level.num_entities < 256; i++ ) {
 		gentity_t *ent = G_Spawn();
-		G_InitReservedEntity( ent );
-		level.reservedEnts.push_back( ent );
+		G_InitReservedItemEntity( ent, &bg_itemlist[i] );
 	}
 }
 

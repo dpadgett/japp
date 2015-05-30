@@ -564,7 +564,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	InitBodyQue();
 
 	// reserve some spots for entities that must have indices < 255
-	InitReservedEntities();
+	InitReservedItemEntities();
 
 	ClearRegisteredItems();
 
