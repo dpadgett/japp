@@ -144,6 +144,9 @@ if plat == 'Windows':
 	if bits == 32:
 		game_env['LIBS'] += [ 'user32' ]
 
+if plat != 'Windows':
+	game_env['LIBS'] += [ 'pthread' ]
+
 # project settings
 game_env['CPPPATH'] += [ '#/game' ]
 game_env['CPPDEFINES'] += [ 'PROJECT_GAME', 'JPLUA' ]
