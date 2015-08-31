@@ -16,6 +16,7 @@
 
 debug = int( ARGUMENTS.get( 'debug', 0 ) )
 force32 = int( ARGUMENTS.get( 'force32', 0 ) )
+verbose = int( ARGUMENTS.get( 'verbose', 0 ) )
 
 def cmp_version( v1, v2 ):
 	def normalise( v ):
@@ -85,16 +86,17 @@ if not sys.stdout.isatty():
 	for key in colours.keys():
 		colours[key] = ''
 
-env['SHCCCOMSTR'] = env['SHCXXCOMSTR'] = env['CCCOMSTR'] = env['CXXCOMSTR'] = \
-	'%s compiling: %s$SOURCE%s' % (colours['cyan'], colours['white'], colours['end'])
-env['ARCOMSTR'] = \
-	'%s archiving: %s$TARGET%s' % (colours['orange'], colours['white'], colours['end'])
-env['RANLIBCOMSTR'] = \
-	'%s  indexing: %s$TARGET%s' % (colours['orange'], colours['white'], colours['end'])
-env['ASCOMSTR'] = \
-	'%sassembling: %s$TARGET%s' % (colours['orange'], colours['white'], colours['end'])
-env['SHLINKCOMSTR'] = env['LINKCOMSTR'] = \
-	'%s   linking: %s$TARGET%s' % (colours['green'], colours['white'], colours['end'])
+if verbose == 0:
+	env['SHCCCOMSTR'] = env['SHCXXCOMSTR'] = env['CCCOMSTR'] = env['CXXCOMSTR'] = \
+		'%s compiling: %s$SOURCE%s' % (colours['cyan'], colours['white'], colours['end'])
+	env['ARCOMSTR'] = \
+		'%s archiving: %s$TARGET%s' % (colours['orange'], colours['white'], colours['end'])
+	env['RANLIBCOMSTR'] = \
+		'%s  indexing: %s$TARGET%s' % (colours['orange'], colours['white'], colours['end'])
+	env['ASCOMSTR'] = \
+		'%sassembling: %s$TARGET%s' % (colours['orange'], colours['white'], colours['end'])
+	env['SHLINKCOMSTR'] = env['LINKCOMSTR'] = \
+		'%s   linking: %s$TARGET%s' % (colours['green'], colours['white'], colours['end'])
 
 # obtain the compiler version
 import commands
@@ -207,7 +209,6 @@ if plat == 'Linux' or plat == 'Darwin':
 
 	# c++ flags
 	env['CXXFLAGS'] += [ '-fvisibility-inlines-hidden', '-std=c++11' ]
-
 elif plat == 'Windows':
 	# assume msvc
 	env['CFLAGS'] = [ '/TC' ] # compile as c
