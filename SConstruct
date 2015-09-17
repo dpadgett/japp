@@ -209,6 +209,9 @@ if plat == 'Linux' or plat == 'Darwin':
 
 	# c++ flags
 	env['CXXFLAGS'] += [ '-fvisibility-inlines-hidden', '-std=c++11' ]
+
+	# link flags
+	env['LINKFLAGS'] += [ '-static-libstdc++', '-static-libgcc' ]
 elif plat == 'Windows':
 	# assume msvc
 	env['CFLAGS'] = [ '/TC' ] # compile as c

@@ -70,7 +70,7 @@ extern int g_G2AllocServer;
 #if defined(_MSC_VER)
 #define Q_EXPORT __declspec(dllexport)
 #elif __GNUC__ >= 3
-#define Q_EXPORT __attribute__((visibility("default")))
+#define Q_EXPORT extern "C" __attribute__((visibility("default")))
 #else
 #define Q_EXPORT
 #endif

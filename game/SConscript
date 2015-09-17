@@ -145,13 +145,13 @@ if plat == 'Windows':
 		game_env['LIBS'] += [ 'user32' ]
 
 if plat != 'Windows':
-	game_env['LIBS'] += [ 'pthread' ]
+	game_env['LIBS'] += [ 'pthread', 'rt' ]
 
 # project settings
 game_env['CPPPATH'] += [ '#/game' ]
 game_env['CPPDEFINES'] += [ 'PROJECT_GAME', 'JPLUA' ]
 if plat == 'Linux':
-	game_env['CPPDEFINES'] += [ 'LUA_USE_LINUX' ]
+	game_env['CPPDEFINES'] += [ 'LUA_USE_LINUX', '__STDC_FORMAT_MACROS' ]
 game_env['LIBPREFIX'] = ''
 
 # targets
